@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:section2/button_controller.dart';
 import 'package:section2/products.dart';
 
 class ProductManager extends StatefulWidget {
@@ -17,21 +18,22 @@ class _ProductManagerState extends State<ProductManager> {
       super.initState();
       _products.add(widget.startingPoint);
     }
+  //this function will get passed into ButtonController Widget
+  //then the ButtonController Widget can run that function
+  void addProduct(String prod){
+    setState(() {
+          _products.add(prod);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
-            margin: EdgeInsets.all(10.0),
-            child: RaisedButton(
-               color: Theme.of(context).primaryColor,
-                child: Text("add produce"),
-                onPressed: () {
-                  setState(() {
-                    _products.add("Advanced Food Tester");
-                  });
-                }
-            )
+          //making button as separate widget in other class
+          //sending along the function that the button will run
+          //can pass in the function as a parameter
+          child: ButtonController(addProduct)
           ),
         Products(_products)
       ],
