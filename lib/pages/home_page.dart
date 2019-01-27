@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:section2/product_manager.dart';
 
 class HomePage extends StatelessWidget {
+  final List<Map<String,dynamic>> products;
+
+  HomePage(this.products);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +24,7 @@ class HomePage extends StatelessWidget {
             ],),
           ),
           appBar: AppBar(title: Text("Easy List")),
-          body: ProductManager()
+          body: ProductManager(products)
           //body: ProductManager(startingPoint: "Food Tester")
       );
   }
