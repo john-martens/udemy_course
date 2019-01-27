@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:section2/product_manager.dart';
+import 'package:section2/pages/auth.dart';
+import 'package:section2/pages/home_page.dart';
+import 'package:section2/pages/product_admin.dart';
 //import 'package:flutter/rendering.dart';
 
 void main(){
@@ -16,10 +18,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepOrange,
         accentColor: Colors.deepPurple
       ),
-      home: Scaffold(
-          appBar: AppBar(title: Text("Easy List")),
-          body: ProductManager("Food Tester")
-      )
+      //home: AuthPage(),
+      routes: {
+        '/' : (BuildContext context) => HomePage(),
+        '/admin' : (BuildContext context) => ProductAdminPage(),
+      },
     );
   }
 }

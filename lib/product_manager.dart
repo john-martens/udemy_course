@@ -3,28 +3,39 @@ import 'package:section2/button_controller.dart';
 import 'package:section2/products.dart';
 
 class ProductManager extends StatefulWidget {
-  final String startingPoint;
-  ProductManager(this.startingPoint);
+  final Map<String, String> startingPoint;
+  //{} below means param is optional
+  ProductManager({this.startingPoint});
 
   @override
   _ProductManagerState createState() => _ProductManagerState();
 }
 
 class _ProductManagerState extends State<ProductManager> {
-  List<String> _products = [];
+  List<Map<String, String>> _products = [];
 
   @override
     void initState() {
       super.initState();
-      _products.add(widget.startingPoint);
+      if (widget.startingPoint != null){
+        _products.add(widget.startingPoint);
+      }
     }
   //this function will get passed into ButtonController Widget
   //then the ButtonController Widget can run that function
-  void addProduct(String prod){
+  void addProduct(Map<String, String> prod){
     setState(() {
           _products.add(prod);
     });
   }
+
+  void deleteProduct(int index){
+    setState(() {
+          _products.removeAt(index);
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,7 +46,9 @@ class _ProductManagerState extends State<ProductManager> {
           //can pass in the function as a parameter
           child: ButtonController(addProduct)
           ),
-        Products(_products)
+          Expanded(
+            child: Products(_products, delFunction: deleteProduct)
+        )
       ],
     );
   }

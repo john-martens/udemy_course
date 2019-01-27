@@ -14,7 +14,7 @@ class ButtonController extends StatelessWidget {
             child: Text("add produce"),
             onPressed: () {
               //call function received from parent
-              btncode("New Product");      
+              btncode({'title':'Chocolate','image': 'assets/food.jpg'});      
               }
           )    
     );
