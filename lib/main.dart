@@ -44,8 +44,10 @@ class _MyAppState extends State<MyApp>{
       theme:ThemeData(
         //brightness:  Brightness.light -> can also do dark
         //fontFamily:  'Oswald' -> set for entire app
+        brightness: Brightness.light,
         primarySwatch: Colors.deepOrange,
-        accentColor: Colors.deepPurple
+        accentColor: Colors.deepPurple,
+        buttonColor: Colors.deepPurple
       ),
       //home: AuthPage(),
       routes: {

@@ -8,6 +8,28 @@ class ProductCard extends StatelessWidget {
   final int index;
 
   ProductCard(this.product,this.index);
+
+Widget _buildButtonBar(BuildContext context){
+  return ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.info),
+              color: Theme.of(context).accentColor,
+              onPressed: (){
+                Navigator.pushNamed<bool>(context,'/product/' + index.toString());
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.favorite_border),
+              color: Colors.red,
+              onPressed: (){
+                
+              },
+            ),
+          ],);
+}
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,24 +47,7 @@ class ProductCard extends StatelessWidget {
             )
             ),
           AddressTag("Union Square San Francisco"),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.info),
-              color: Theme.of(context).accentColor,
-              onPressed: (){
-                Navigator.pushNamed<bool>(context,'/product/' + index.toString());
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.favorite_border),
-              color: Colors.red,
-              onPressed: (){
-                
-              },
-            ),
-          ],)
+          _buildButtonBar(context)
         ],
       ),
     );
