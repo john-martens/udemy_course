@@ -42,6 +42,8 @@ class _MyAppState extends State<MyApp>{
     return MaterialApp(
       //debugShowMaterialGrid: true,
       theme:ThemeData(
+        //brightness:  Brightness.light -> can also do dark
+        //fontFamily:  'Oswald' -> set for entire app
         primarySwatch: Colors.deepOrange,
         accentColor: Colors.deepPurple
       ),
@@ -60,7 +62,12 @@ class _MyAppState extends State<MyApp>{
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute<bool>(
             builder: (context) => 
-                ProductPage(_products[index]['title'],_products[index]['image']) 
+                ProductPage(
+                  _products[index]['title'],
+                  _products[index]['image'],
+                  _products[index]['price'],
+                  _products[index]['description']
+                ) 
             );
         }
         return null;

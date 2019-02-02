@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:section2/widgets/ui_element/title_default.dart';
 
 class ProductPage extends StatelessWidget {
-  final String title, imageUrl;
+  final String title, imageUrl, description;
+  final double price;
 
-  ProductPage(this.title, this.imageUrl);
+  ProductPage(this.title, this.imageUrl, this.price,this.description);
 
+/*
   _showWarningDialog(BuildContext context) {
     showDialog(context: context,
         builder: (context) {
@@ -27,7 +30,7 @@ class ProductPage extends StatelessWidget {
           ); //alet diag
         });
   }
-
+*/
   //wrap entire scaffold as a child inside WillPopScope
   //this allows you to control back arrow code and return a value
   @override
@@ -45,14 +48,22 @@ class ProductPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Image.asset(imageUrl),
-                Container(padding: EdgeInsets.all(10.0), child: Text(title)),
+                TitleDefault(title),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                  Text('Union Square, San Francisco', style: TextStyle(fontFamily: 'Oswald',color: Colors.grey)),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5.0), 
+                    child: Text('|', style: TextStyle(color: Colors.grey))
+                  ),
+                  Text("\$" + price.toString(), style: TextStyle(fontFamily: 'Oswald',color: Colors.grey))
+                ],
+                ),
                 Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      child: Text("Delete"),
-                      onPressed: () => _showWarningDialog(context)
-                    ))
+                  padding: EdgeInsets.all(10.0) ,
+                  child: Text(description,textAlign: TextAlign.center)
+                )
               ],
             ))) //child
         );
