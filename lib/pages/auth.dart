@@ -8,9 +8,17 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+
+  final Map<String,dynamic> _loginData = {
+    'email': null,
+    'password': null,
+    "terms": false
+  };
   String _emailVal;
   String _passwordVal;
   bool _acceptTerms = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
 
   DecorationImage _getBG() {
     return DecorationImage(
@@ -21,53 +29,58 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildEmailTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
           labelText: "email", filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.emailAddress,
-      onChanged: (String val) {
-        setState(() {
-          _emailVal = val;
-        });
+      validator: (String val){
+        if(val.isEmpty) 
+        return "Invalid email";
       },
+      onSaved: (String val) {
+          _loginData['email'] = val;
+      }
     );
   }
 
   Widget _buildPassWordTextField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
           labelText: "password", filled: true, fillColor: Colors.white),
       obscureText: true,
-      onChanged: (String val) {
-        setState(() {
-          _passwordVal = val;
-        });
+      validator: (String val){
+        if(val.isEmpty || val.length < 4)
+          return "Password must be min of 4 characters";
       },
+      onSaved: (String val) {
+          _loginData['password'] = val;
+      }
     );
   }
 
   Widget _buildAcceptTermsSwitch() {
     return SwitchListTile(
-        value: true,
+        value: _loginData['terms'],
         onChanged: (bool val) {
-          setState(() {
-            _acceptTerms = val;
-          });
+            _loginData['terms']=val;
         },
         title: Text("Accept Terms"));
   }
 
   void _submitForm() {
-    print(_emailVal);
-    print(_passwordVal);
-    print(_acceptTerms);
+    if(_formKey.currentState.validate()==false || _loginData['terms']==false){
+      return;
+    }
+    _formKey.currentState.save();
+    print(_loginData);
     Navigator.pushReplacementNamed(context, '/products');
   }
 
   @override
   Widget build(BuildContext context) {
     final double _deviceWidth = MediaQuery.of(context).size.width;
-    final double _containWidth = _deviceWidth > 550? 500.0 :  _deviceWidth * 0.95;
+    final double _containWidth =
+        _deviceWidth > 550 ? 500.0 : _deviceWidth * 0.95;
     return Scaffold(
       appBar: AppBar(title: Text("Login")),
       body: Container(
@@ -79,30 +92,32 @@ class _AuthPageState extends State<AuthPage> {
           child: SingleChildScrollView(
             child: Container(
               width: _containWidth,
-              child: Column(children: <Widget>[
-                _buildEmailTextField(),
-                SizedBox(height: 10.0),
-                _buildPassWordTextField(),
-                _buildAcceptTermsSwitch(),
-                SizedBox(height: 10.0),
-                RaisedButton(
-                    child: Text("Login"),
-                    textColor: Colors.white,
-                    onPressed: _submitForm
-                ),
-                /* 
-                Alternative:  Custom button as Container wrapped in Gesture Dector
-                */
-                GestureDetector(
-                  onTap: _submitForm,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 100.0,
-                    child: Text("Log in With Custom Button"),
-                    color: Colors.greenAccent,
-                  ),
-                )
-              ]),
+              child: Form(
+                key: _formKey,
+                child: Column(children: <Widget>[
+                  _buildEmailTextField(),
+                  SizedBox(height: 10.0),
+                  _buildPassWordTextField(),
+                  _buildAcceptTermsSwitch(),
+                  SizedBox(height: 10.0),
+                  RaisedButton(
+                      child: Text("Login"),
+                      textColor: Colors.white,
+                      onPressed: _submitForm),
+                  /* 
+                  Alternative:  Custom button as Container wrapped in Gesture Dector
+                  */
+                  GestureDetector(
+                    onTap: _submitForm,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 100.0,
+                      child: Text("Log in With Custom Button"),
+                      color: Colors.greenAccent,
+                    ),
+                  )
+                ]),
+              ),
             ),
           ),
         ),
