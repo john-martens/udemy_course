@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:section2/models/product.dart';
 
 class ProductEditPage extends StatefulWidget {
   final Function addProduct;
   final Function updateProduct;
-  final Map<String, dynamic> product;
+  final Product product;
   final int productIndex;
 
   //{} means optional arguments
@@ -27,77 +28,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   //needed for forms -> a form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-//got this from stack overflow - check if data is number
-  bool _isNumeric(String s) {
-    if (s == null) {
-      return false;
-    }
-    try {
-      double.parse(s);
-    } catch (e) {
-      return false;
-    }
-    return true;
-  }
-
-  Widget _buildTitleTextField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Product Title'),
-      initialValue: widget.product==null? "" : widget.product['title'],
-      validator: (String val) {
-        if (val.isEmpty || val.length < 5)
-          return 'Title is required, 5 characters minimum';
-      },
-      onSaved: (String val) {
-          _formData['title'] = val;
-      }
-    );
-  }
-
-  Widget _buildDescriptionTextField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Product Description'),
-      initialValue: widget.product==null? "" : widget.product['description'],
-      maxLines: 4,
-      validator: (String val) {
-        if (val.isEmpty || val.length < 10)
-          return 'Description is required, 10 chars minimum';
-      },
-      onSaved: (String val) {
-          _formData['description']  = val;
-      }
-    );
-  }
-
-  Widget _buildPriceTextField() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Price'),
-      initialValue: widget.product==null? "" : widget.product['price'].toString(),
-      keyboardType: TextInputType.number,
-      validator: (String val) {
-        return _isNumeric(val) == false ? "Price must be numeric" : null;
-      },
-      onSaved: (String val) {
-         _formData['price'] =  double.parse(val);
-      }
-    );
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState.validate() == false) return;
-    _formKey.currentState.save();
-    if(widget.product==null){
-      widget.addProduct(_formData);
-    }
-    else{
-      widget.updateProduct(widget.productIndex, _formData);
-    }
-    
-    Navigator.pushReplacementNamed(context, '/products');
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildGestureDetecter(BuildContext context){
     final double _deviceWidth = MediaQuery.of(context).size.width;
     final double _containWidth =
         _deviceWidth > 550.0 ? 500.0 : _deviceWidth * 0.95;
@@ -105,8 +36,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     final double _padding = (_deviceWidth - _containWidth) / 2;
     //wrap in gesture dectector to click OFF form to close keyboard
 
-    Widget pageContent = 
-    GestureDetector(
+    return GestureDetector(
       onTap:(){
         FocusScope.of(context).requestFocus(FocusNode());
       },
@@ -130,14 +60,98 @@ class _ProductEditPageState extends State<ProductEditPage> {
           ),
         ),
       ),
-    ); //Gesture detector
+    );
 
-      return widget.product==null? pageContent :
+  }
+
+//got this from stack overflow - check if data is number
+  bool _isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    try {
+      double.parse(s);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  Widget _buildTitleTextField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Product Title'),
+      initialValue: widget.product==null? "" : widget.product.title,
+      validator: (String val) {
+        if (val.isEmpty || val.length < 5)
+          return 'Title is required, 5 characters minimum';
+      },
+      onSaved: (String val) {
+          _formData['title'] = val;
+      }
+    );
+  }
+
+  Widget _buildDescriptionTextField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Product Description'),
+      initialValue: widget.product==null? "" : widget.product.description,
+      maxLines: 4,
+      validator: (String val) {
+        if (val.isEmpty || val.length < 10)
+          return 'Description is required, 10 chars minimum';
+      },
+      onSaved: (String val) {
+          _formData['description']  = val;
+      }
+    );
+  }
+
+  Widget _buildPriceTextField() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Price'),
+      initialValue: widget.product==null? "" : widget.product.price.toString(),
+      keyboardType: TextInputType.number,
+      validator: (String val) {
+        return _isNumeric(val) == false ? "Price must be numeric" : null;
+      },
+      onSaved: (String val) {
+         _formData['price'] =  double.parse(val);
+      }
+    );
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState.validate() == false) return;
+    _formKey.currentState.save();
+    if(widget.product==null){
+      widget.addProduct(
+        Product(title: _formData['title'],
+        description:  _formData['description'],
+        price:  _formData['price'],
+        image:  _formData['image']
+        )
+      );
+    }
+    else{
+      widget.updateProduct(widget.productIndex, 
+          Product(title: _formData['title'],
+                  description:  _formData['description'],
+                  price:  _formData['price'],
+                  image:  _formData['image'])
+            );
+    }
+    Navigator.pushReplacementNamed(context, '/products');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+      return widget.product==null? _buildGestureDetecter(context) :
           Scaffold(
             appBar: AppBar(
               title: Text("Edit Product"),
             ),
-            body: pageContent,
+            body: _buildGestureDetecter(context),
           );
 
   } //end widget build

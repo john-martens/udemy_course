@@ -3,6 +3,8 @@ import 'package:section2/pages/auth.dart';
 import 'package:section2/pages/home_page.dart';
 import 'package:section2/pages/product_admin.dart';
 import 'package:section2/pages/product_page.dart';
+import 'package:section2/models/product.dart';
+
 //import 'package:flutter/rendering.dart';
 
 void main(){
@@ -20,11 +22,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp>{
 
-  List<Map<String,dynamic>> _products = [];
+  List<Product> _products = [];
 
   //this function will get passed into ButtonController Widget
   //then the ButtonController Widget can run that function
-  void addProduct(Map<String, dynamic> prod){
+  void addProduct(Product prod){
     setState(() {
           _products.add(prod);
     });
@@ -36,7 +38,7 @@ class _MyAppState extends State<MyApp>{
     });
   }
 
- void updateProduct(int index, Map<String, dynamic> newproduct){
+ void updateProduct(int index, Product newproduct){
     setState(() {
           _products[index] = newproduct;
     });
@@ -71,10 +73,10 @@ class _MyAppState extends State<MyApp>{
           return MaterialPageRoute<bool>(
             builder: (context) => 
                 ProductPage(
-                  _products[index]['title'],
-                  _products[index]['image'],
-                  _products[index]['price'],
-                  _products[index]['description']
+                  _products[index].title,
+                  _products[index].image,
+                  _products[index].price,
+                  _products[index].description
                 ) 
             );
         }
